@@ -32,54 +32,58 @@ class SleepItem(object):
     def __repr__(self):
         return "<SleepItem#%s;begin:%s;end:%s>" % (self.id, self.begin, self.end)
 
-data_filename = 'data'
-file = open(data_filename,'r')
-n_line = -1
-sleep_items = []
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+         sys.exit("Fatal Error, aborting\n\tExpected one argument : the file to be parsed")
 
-for line in file:
-    # line index for log messages
-    n_line = n_line + 1
+    data_filename = sys.argv[1]
+    file = open(data_filename,'r')
+    n_line = -1
+    sleep_items = []
 
-    # skip comments
-    if line.startswith('#'):
-        continue
+    for line in file:
+        # line index for log messages
+        n_line = n_line + 1
 
-    line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\d+)$"
-    m = re.search(line_pattern, line)
-    # no match : skip
-    if not m:
-        print('line '+str(n_line)+' could not be parsed.')
-        continue
+        # skip comments
+        if line.startswith('#'):
+            continue
 
-    # match : create item
-    m_begin = m.group(1)
-    if m_begin :
-        m_begin = parse_date(m_begin)
-        pass
+        line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\d+)$"
+        m = re.search(line_pattern, line)
+        # no match : skip
+        if not m:
+            print('line '+str(n_line)+' could not be parsed.')
+            continue
 
-    m_end = m.group(2)
-    if m_end :
-        m_end = parse_date(m_end)
-        pass
+        # match : create item
+        m_begin = m.group(1)
+        if m_begin :
+            m_begin = parse_date(m_begin)
+            pass
 
-    m_amount = m.group(3)
-    if m_amount:
-        re_amount = re.search("(?P<hours>\d+)(-(?P<minutes>\d+))?", m_amount).groupdict()
-        clean_amount = dict()
-        clean_amount.update((k, int(v)) for k, v in re_amount.items() if v is not None)
-        m_amount = datetime.timedelta(**clean_amount)
+        m_end = m.group(2)
+        if m_end :
+            m_end = parse_date(m_end)
+            pass
 
-    m_alone = m.group(4)
-    if m_alone:
-        m_alone = m_alone == "true"
-    
-    m_where = m.group(5)
-    if m_where:
-        pass    
+        m_amount = m.group(3)
+        if m_amount:
+            re_amount = re.search("(?P<hours>\d+)(-(?P<minutes>\d+))?", m_amount).groupdict()
+            clean_amount = dict()
+            clean_amount.update((k, int(v)) for k, v in re_amount.items() if v is not None)
+            m_amount = datetime.timedelta(**clean_amount)
 
-    sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
+        m_alone = m.group(4)
+        if m_alone:
+            m_alone = m_alone == "true"
+        
+        m_where = m.group(5)
+        if m_where:
+            pass    
 
-print("\ncreated "+str(len(sleep_items))+" entries")
-for s in sleep_items:
-    print(s)
+        sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
+
+    print("\ncreated "+str(len(sleep_items))+" entries")
+    for s in sleep_items:
+        print(s)
