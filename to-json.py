@@ -2,17 +2,7 @@ import os
 import sys
 import re
 import datetime
-
-def parse_date(s):
-    s = str(s)
-    match = re.search("^(?P<day>\d+)-(?P<month>\d+)-(?P<year>\d+)-(?P<hour>\d+)-(?P<minute>\d+)$", s)
-    result = match.groupdict()
-    
-    # values must be int
-    clean_result = dict()
-    clean_result.update((k, int(v)) for k, v in result.items())
-
-    return datetime.datetime(**clean_result)
+import json
 
 class SleepItem(object):
     """SleepItem class"""
@@ -27,21 +17,41 @@ class SleepItem(object):
         self.amount = amount
         self.alone = alone
         self.where = where
-    def __str__(self):
-        return "SleepItem#%s, from %s to %s, alone?%s, at:%s" % (self.id, self.begin, self.end, self.alone, self.where)
-    def __repr__(self):
-        return "<SleepItem#%s;begin:%s;end:%s>" % (self.id, self.begin, self.end)
+
+def parse_date(s):
+    s = str(s)
+    match = re.search("^(?P<day>\d+)-(?P<month>\d+)-(?P<year>\d+)-(?P<hour>\d+)-(?P<minute>\d+)$", s)
+    result = match.groupdict()
+    
+    # values must be int
+    clean_result = dict()
+    clean_result.update((k, int(v)) for k, v in result.items())
+
+    return datetime.datetime(**clean_result)
+
+def encode_json(obj):
+    if isinstance(obj, datetime.datetime):
+        return obj.isoformat()
+    elif isinstance(obj, datetime.timedelta):
+        return str(obj)
+    elif isinstance(obj, SleepItem):
+        return obj.__dict__
+    else:
+        raise TypeError(str(obj.__class__) + "is not serialisable")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
          sys.exit("Fatal Error, aborting\n\tExpected one argument : the file to be parsed")
 
-    data_filename = sys.argv[1]
-    file = open(data_filename,'r')
+    in_filename = sys.argv[1]
+    out_filename = in_filename + ".json"
+    in_file = open(in_filename,'r')
+    out_file = open(out_filename,'w')
+    
     n_line = -1
     sleep_items = []
 
-    for line in file:
+    for line in in_file:
         # line index for log messages
         n_line = n_line + 1
 
@@ -85,5 +95,5 @@ if __name__ == "__main__":
         sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
 
     print("\ncreated "+str(len(sleep_items))+" entries")
-    for s in sleep_items:
-        print(s)
+
+    json.dump(obj=sleep_items, fp=out_file, indent=4, default=encode_json)
