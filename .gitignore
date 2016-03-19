@@ -1,2 +1,4 @@
+.idea/
+/*.iml
 res/*
 !res/sample_data*
