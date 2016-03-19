@@ -6,12 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class SleepApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("view-form.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Sleep");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();
     }
