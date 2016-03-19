@@ -40,11 +40,12 @@ def encode_json(obj):
         raise TypeError(str(obj.__class__) + "is not serialisable")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-         sys.exit("Fatal Error, aborting\n\tExpected one argument : the file to be parsed")
+    if len(sys.argv) != 3:
+         sys.exit("Fatal Error, aborting\n \
+             \tusage: to-json.py infile outfile")
 
     in_filename = sys.argv[1]
-    out_filename = in_filename + ".json"
+    out_filename = sys.argv[2]
     in_file = open(in_filename,'r')
     out_file = open(out_filename,'w')
     
