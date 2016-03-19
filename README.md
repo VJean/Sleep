@@ -1,2 +1,2 @@
 # Sleep
-Some stats and analysis of your sleep schedule
+Keep track of your sleep schedule
