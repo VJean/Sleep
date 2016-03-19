@@ -1,4 +1,6 @@
 .idea/
 /*.iml
-res/*
+out/
+
+res/
 !res/sample_data*
