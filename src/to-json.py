@@ -18,6 +18,14 @@ class SleepItem(object):
         self.alone = alone
         self.where = where
 
+class Profile(object):
+    """Profile class"""
+    def __init__(self, name, places=[], sleepItems=[]):
+        super(Profile, self).__init__()
+        self.name = name
+        self.places = places
+        self.sleepItems = sleepItems
+
 def parse_date(s):
     s = str(s)
     match = re.search("^(?P<day>\d+)-(?P<month>\d+)-(?P<year>\d+)-(?P<hour>\d+)-(?P<minute>\d+)$", s)
@@ -34,7 +42,7 @@ def encode_json(obj):
         return obj.isoformat()
     elif isinstance(obj, datetime.timedelta):
         return str(obj)
-    elif isinstance(obj, SleepItem):
+    elif isinstance(obj, (SleepItem, Profile)):
         return obj.__dict__
     else:
         raise TypeError(str(obj.__class__) + "is not serialisable")
@@ -50,7 +58,13 @@ if __name__ == "__main__":
     out_file = open(out_filename,'w')
     
     n_line = -1
+    name = ""
+    foundName = False
+    places = ""
+    foundPlaces = False
     sleep_items = []
+
+    line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\d+)$"
 
     for line in in_file:
         # line index for log messages
@@ -60,7 +74,17 @@ if __name__ == "__main__":
         if line.startswith('#'):
             continue
 
-        line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\d+)$"
+        if not foundName:
+            if re.match("^\s*\w+\s*$", line):
+                foundName = True
+                name = line.strip()
+            continue
+        if not foundPlaces:
+            if re.match("^\s*[\w,]+\s*$", line):
+                foundPlaces = True
+                places = line.strip().split(',')
+            continue
+
         m = re.search(line_pattern, line)
         # no match : skip
         if not m:
@@ -95,6 +119,8 @@ if __name__ == "__main__":
 
         sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
 
-    print("\ncreated "+str(len(sleep_items))+" entries")
 
-    json.dump(obj=sleep_items, fp=out_file, indent=4, default=encode_json)
+    p = Profile(name,places,sleep_items)
+
+    print("Parsed profile '"+name+"', "+str(len(sleep_items))+" entries.")
+    json.dump(obj=p, fp=out_file, indent=4, default=encode_json)

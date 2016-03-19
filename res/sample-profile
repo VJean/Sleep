@@ -2,6 +2,8 @@
 # sleep_estimated : required if different from sleep_end - sleep_begin
 # alone(iykwim) : true/false
 # where : 0:place0,1:place1,2:place2,...
+sample_profile
+place0,place1,place2,place3,place4
 26-1-2016-0-0,26-1-2016-8-30,5-0,false,1
 27-1-2016-0-30,27-1-2016-11-45,8-30,false,0
 28-1-2016-1-0,28-1-2016-8-40,6,false,1

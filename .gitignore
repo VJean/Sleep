@@ -2,5 +2,5 @@
 /*.iml
 out/
 
-res/
-!res/sample_data*
+res/*
+!res/sample*
