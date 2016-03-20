@@ -1,33 +1,20 @@
 package model;
 
-import com.fasterxml.jackson.core.JsonParser;
 import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 
-import java.io.File;
-
 
 /**
  * Created by JeanV on 20/03/2016.
  */
-public class Profile {
-    private static Profile ourInstance = new Profile();
-
+public class SleepProfile {
     private StringProperty name = new SimpleStringProperty();
     private ObservableList<String> places = new SimpleListProperty<>();
     private ObservableList<SleepItem> sleepItems = new SimpleListProperty<>();
 
-    private Profile() {
-    }
-
-    /**
-     * Singleton Class getter
-     * @return the instance of the singleton
-     */
-    public static Profile getInstance() {
-        return ourInstance;
+    public SleepProfile() {
     }
 
     /**
@@ -77,9 +64,5 @@ public class Profile {
      */
     public void setPlaces(ObservableList places) {
         this.places = places;
-    }
-
-    public void loadProfile(File f){
-
     }
 }

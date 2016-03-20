@@ -5,7 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
-import model.Profile;
+import model.SleepModel;
+import model.SleepProfile;
 
 import java.io.File;
 import java.time.LocalDate;
@@ -32,7 +33,7 @@ public class SleepController {
     @FXML
     private Button addButton;
 
-    private Profile profile = Profile.getInstance();
+    private SleepModel model = SleepModel.getInstance();
 
 
     public SleepController() {
@@ -57,7 +58,7 @@ public class SleepController {
         fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json files", "json"));
         File f = fileChooser.showOpenDialog(rootBorderPane.getScene().getWindow());
 
-        profile.loadProfile(f);
+        model.loadProfile(f);
     }
 
     public void addSleepItem(){
