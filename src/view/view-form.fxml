@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SleepController">
+<BorderPane fx:id="rootBorderPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SleepController">
    <center>
       <GridPane alignment="center" hgap="20.0" prefWidth="500.0" vgap="20.0" BorderPane.alignment="CENTER">
          <columnConstraints>
@@ -34,17 +34,17 @@
             <HBox alignment="CENTER_LEFT" layoutX="15.0" layoutY="15.0" spacing="10.0" GridPane.columnIndex="1">
                <children>
                   <Label text="Hour:" />
-                  <Spinner fx:id="beginHourField" min="0" max="23" prefWidth="55.0" />
+                  <Spinner fx:id="beginHourField" max="23" min="0" prefWidth="55.0" />
                   <Label text="Minute:" />
-                  <Spinner fx:id="beginMinuteField" min="0" max="59" prefWidth="55.0" />
+                  <Spinner fx:id="beginMinuteField" max="59" min="0" prefWidth="55.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER_LEFT" layoutX="409.0" layoutY="15.0" spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <Label text="Hour:" />
-                  <Spinner fx:id="endHourField" min="0" max="23" prefWidth="55.0" />
+                  <Spinner fx:id="endHourField" max="23" min="0" prefWidth="55.0" />
                   <Label text="Minute:" />
-                  <Spinner fx:id="endMinuteField" min="0" max="59" prefWidth="55.0" />
+                  <Spinner fx:id="endMinuteField" max="59" min="0" prefWidth="55.0" />
                </children>
             </HBox>
             <CheckBox fx:id="aloneCheckBox" contentDisplay="RIGHT" mnemonicParsing="false" text="Alone ?" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
@@ -54,7 +54,7 @@
                   <ChoiceBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
                </children>
             </HBox>
-            <Button fx:id="addButton" mnemonicParsing="false" prefWidth="80.0" text="Add" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#addSleepItem" prefWidth="80.0" text="Add" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -66,7 +66,7 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Open profile..." />
+              <MenuItem mnemonicParsing="false" onAction="#loadProfile" text="Open profile..." />
                   <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>

@@ -3,11 +3,16 @@ package controller;
 import javafx.beans.NamedArg;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
+import model.Profile;
 
+import java.io.File;
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class SleepController {
+    @FXML
+    private BorderPane rootBorderPane;
     @FXML
     private DatePicker beginDatePicker;
     @FXML
@@ -27,6 +32,9 @@ public class SleepController {
     @FXML
     private Button addButton;
 
+    private Profile profile = Profile.getInstance();
+
+
     public SleepController() {
     }
 
@@ -41,7 +49,18 @@ public class SleepController {
         endDatePicker.setValue(today);
         endHourField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 23, 8));
         endMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59, 30));
+    }
 
+    public void loadProfile(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open profile");
+        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json files", "json"));
+        File f = fileChooser.showOpenDialog(rootBorderPane.getScene().getWindow());
+
+        profile.loadProfile(f);
+    }
+
+    public void addSleepItem(){
 
     }
 
