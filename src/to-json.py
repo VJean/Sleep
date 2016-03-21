@@ -115,7 +115,7 @@ if __name__ == "__main__":
         
         m_where = m.group(5)
         if m_where:
-            pass    
+            m_where = int(m_where)
 
         sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
 
