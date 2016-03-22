@@ -41,7 +41,15 @@ def encode_json(obj):
     if isinstance(obj, datetime.datetime):
         return obj.isoformat()
     elif isinstance(obj, datetime.timedelta):
-        return str(obj)
+        # if obj is empty
+        if str(obj) == "" or obj is None:
+            return str(obj)
+
+        # convert duration to iso8601 formatting
+        t = datetime.datetime.strptime(str(obj), "%H:%M:%S")
+        s = "PT{0}H{1}M{2}S".format(t.hour, t.minute, t.second)
+
+        return s
     elif isinstance(obj, (SleepItem, Profile)):
         return obj.__dict__
     else:
