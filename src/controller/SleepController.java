@@ -61,6 +61,10 @@ public class SleepController {
         model.loadProfile(f);
     }
 
+    public void saveProfile() {
+        model.saveProfile();
+    }
+
     public void addSleepItem(){
 
     }
