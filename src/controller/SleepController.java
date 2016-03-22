@@ -40,7 +40,7 @@ public class SleepController implements Observer{
     @FXML
     private ChoiceBox placeChoiceBox;
     @FXML
-    private Button addButton;
+    private ListView sleepItemsListView;
 
     private SleepModel model = SleepModel.getInstance();
 
@@ -85,6 +85,7 @@ public class SleepController implements Observer{
         System.out.println("profile changed notification : " + sp.getName());
 
         placeChoiceBox.setItems(sp.getPlaces());
+        sleepItemsListView.setItems(sp.getSleepItems());
     }
 
     /**

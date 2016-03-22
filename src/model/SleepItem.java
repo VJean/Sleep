@@ -77,4 +77,10 @@ public class SleepItem {
     public void setWhere(int where) {
         this.where = where;
     }
+
+    @Override
+    public String toString() {
+        // just the date
+        return "(id" + String.valueOf(this.id) + ") " + this.end.toLocalDate().toString();
+    }
 }
