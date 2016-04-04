@@ -1,5 +1,9 @@
 package model;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.SimpleBooleanProperty;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -11,16 +15,16 @@ public class SleepItem {
     private LocalDateTime begin;
     private LocalDateTime end;
     private Duration amount;
-    private boolean alone;
+    private BooleanProperty alone = new SimpleBooleanProperty();
     private int where;
 
-    SleepItem(){
+    public SleepItem(){
 
     }
 
     public SleepItem(int id, String beginStr, String endStr, String amountStr, boolean alone, int where) {
         this.id = id;
-        this.alone = alone;
+        this.alone.setValue(alone);
         this.where = where;
         if (amountStr.isEmpty() || amountStr == null)
             this.amount = null;
@@ -62,12 +66,14 @@ public class SleepItem {
         this.amount = amount;
     }
 
+    public BooleanProperty aloneProperty() { return alone; }
+
     public boolean getAlone() {
-        return alone;
+        return alone.get();
     }
 
     public void setAlone(boolean alone) {
-        this.alone = alone;
+        this.alone.setValue(alone);
     }
 
     public int getWhere() {
