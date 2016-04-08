@@ -9,8 +9,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by JeanV on 21/03/2016.
@@ -21,12 +20,9 @@ public class SleepProfileDeserializer extends JsonDeserializer<SleepProfile> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         // get name
         String name = node.get("name").textValue();
-        // get places
-        ArrayList<String> places = new ArrayList<>();
-        ArrayNode placesNode = (ArrayNode) node.get("places");
-        for (JsonNode pn : placesNode){
-            places.add(pn.textValue());
-        }
+
+        SortedSet<String> places = new TreeSet<>();
+
         // get items
         ArrayList<SleepItem> sleepItems = new ArrayList<>();
         ArrayNode sleepItemsNode = (ArrayNode) node.get("sleepItems");
@@ -36,12 +32,11 @@ public class SleepProfileDeserializer extends JsonDeserializer<SleepProfile> {
             String amount = sn.get("amount").textValue();
 
             String where = sn.get("where").textValue();
+            places.add(where);
             boolean alone = sn.get("alone").booleanValue();
 
             sleepItems.add(new SleepItem(begin,end,amount,alone,where));
         }
-
-
 
         return new SleepProfile(name,places,sleepItems);
     }

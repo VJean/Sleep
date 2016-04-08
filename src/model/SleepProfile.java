@@ -11,6 +11,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 
 
 /**
@@ -26,7 +28,7 @@ public class SleepProfile {
     public SleepProfile() {
     }
 
-    public SleepProfile(String name, ArrayList<String> places, ArrayList<SleepItem> sleepItems) {
+    public SleepProfile(String name, Collection<String> places, Collection<SleepItem> sleepItems) {
         this.name.setValue(name);
         this.places = FXCollections.observableArrayList(places);
         this.sleepItems = FXCollections.observableArrayList(sleepItems);

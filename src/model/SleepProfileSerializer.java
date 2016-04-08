@@ -17,13 +17,6 @@ public class SleepProfileSerializer extends JsonSerializer<SleepProfile> {
 
         jGen.writeStringField("name", sP.getName());
 
-        jGen.writeArrayFieldStart("places");
-        for (String p :
-                sP.getPlaces()) {
-            jGen.writeString(p);
-        }
-        jGen.writeEndArray();
-
         jGen.writeArrayFieldStart("sleepItems");
         for (SleepItem sI :
                 sP.getSleepItems()) {
