@@ -20,10 +20,9 @@ class SleepItem(object):
 
 class Profile(object):
     """Profile class"""
-    def __init__(self, name, places=[], sleepItems=[]):
+    def __init__(self, name, sleepItems=[]):
         super(Profile, self).__init__()
         self.name = name
-        self.places = places
         self.sleepItems = sleepItems
 
 def parse_date(s):
@@ -68,11 +67,9 @@ if __name__ == "__main__":
     n_line = -1
     name = ""
     foundName = False
-    places = ""
-    foundPlaces = False
     sleep_items = []
 
-    line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\d+)$"
+    line_pattern = "^([\d\-]+),([\d\-]+),([\d\-]*),(true|false),(\w+)$"
 
     for line in in_file:
         # line index for log messages
@@ -86,11 +83,6 @@ if __name__ == "__main__":
             if re.match("^\s*\w+\s*$", line):
                 foundName = True
                 name = line.strip()
-            continue
-        if not foundPlaces:
-            if re.match("^\s*[\w,]+\s*$", line):
-                foundPlaces = True
-                places = line.strip().split(',')
             continue
 
         m = re.search(line_pattern, line)
@@ -122,13 +114,11 @@ if __name__ == "__main__":
             m_alone = m_alone == "true"
         
         m_where = m.group(5)
-        if m_where:
-            m_where = int(m_where)
 
         sleep_items.append(SleepItem(m_begin,m_end,m_amount,m_alone,m_where))
 
 
-    p = Profile(name,places,sleep_items)
+    p = Profile(name,sleep_items)
 
     print("Parsed profile '"+name+"', "+str(len(sleep_items))+" entries.")
     json.dump(obj=p, fp=out_file, indent=4, default=encode_json)
