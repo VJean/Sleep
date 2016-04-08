@@ -3,6 +3,7 @@ package model;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.StringProperty;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -17,22 +18,22 @@ public class SleepItem implements Comparable<SleepItem> {
     private LocalDateTime end;
     private Duration amount;
     private BooleanProperty alone = new SimpleBooleanProperty();
-    private int where;
+    private StringProperty where;
 
     public SleepItem(){
 
     }
 
-    public SleepItem(int id, String beginStr, String endStr, String amountStr, boolean alone, int where) {
+    public SleepItem(int id, String beginStr, String endStr, String amountStr, boolean alone, String where) {
         this.id = id;
-        this.alone.setValue(alone);
-        this.where = where;
+        this.setAlone(alone);
+        this.setWhere(where);
         if (amountStr.isEmpty() || amountStr == null)
             this.amount = null;
         else
             this.amount = Duration.parse(amountStr);
-        this.begin = LocalDateTime.parse(beginStr);
-        this.end = LocalDateTime.parse(endStr);
+        this.setBegin(LocalDateTime.parse(beginStr));
+        this.setEnd(LocalDateTime.parse(endStr));
     }
 
     public int getId() {
@@ -77,12 +78,14 @@ public class SleepItem implements Comparable<SleepItem> {
         this.alone.setValue(alone);
     }
 
-    public int getWhere() {
-        return where;
+    public StringProperty whereProperty() { return where; }
+
+    public String getWhere() {
+        return where.get();
     }
 
-    public void setWhere(int where) {
-        this.where = where;
+    public void setWhere(String where) {
+        this.where.set(where);
     }
 
     @Override

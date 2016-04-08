@@ -38,7 +38,7 @@ public class SleepProfileSerializer extends JsonSerializer<SleepProfile> {
                 jGen.writeStringField("amount", sI.getAmount().toString());
 
             jGen.writeBooleanField("alone", sI.getAlone());
-            jGen.writeNumberField("where", sI.getWhere());
+            jGen.writeStringField("where", sI.getWhere());
             jGen.writeEndObject();
         }
 

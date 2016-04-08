@@ -36,7 +36,7 @@ public class SleepProfileDeserializer extends JsonDeserializer<SleepProfile> {
             String amount = sn.get("amount").textValue();
 
             int id = sn.get("id").intValue();
-            int where = sn.get("where").intValue();
+            String where = sn.get("where").textValue();
             boolean alone = sn.get("alone").booleanValue();
 
             sleepItems.add(new SleepItem(id,begin,end,amount,alone,where));
