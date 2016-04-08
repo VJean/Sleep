@@ -1,9 +1,6 @@
 package model;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -17,7 +14,7 @@ public class SleepItem implements Comparable<SleepItem> {
     private LocalDateTime end;
     private Duration amount;
     private BooleanProperty alone = new SimpleBooleanProperty();
-    private StringProperty where;
+    private StringProperty where = new SimpleStringProperty();
 
     public SleepItem(){
 
@@ -56,6 +53,10 @@ public class SleepItem implements Comparable<SleepItem> {
 
     public void setAmount(Duration amount) {
         this.amount = amount;
+    }
+
+    public boolean hasCustomAmount() {
+        return getAmount() != null;
     }
 
     public BooleanProperty aloneProperty() { return alone; }
@@ -114,4 +115,5 @@ public class SleepItem implements Comparable<SleepItem> {
     public int compareTo(SleepItem o) {
         return this.begin.compareTo(o.begin);
     }
+
 }
