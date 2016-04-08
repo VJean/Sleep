@@ -6,12 +6,8 @@ import json
 
 class SleepItem(object):
     """SleepItem class"""
-    item_counter = 0
     def __init__(self, begin=None, end=None, amount=None, alone=None, where=None):
         super(SleepItem, self).__init__()
-        # generate unique id
-        self.__class__.item_counter += 1
-        self.id = self.__class__.item_counter
         self.begin = begin
         self.end = end
         self.amount = amount

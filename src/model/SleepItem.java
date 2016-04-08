@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
  * Note: this class has a natural ordering that is inconsistent with equals.
  */
 public class SleepItem implements Comparable<SleepItem> {
-    private int id;
     private LocalDateTime begin;
     private LocalDateTime end;
     private Duration amount;
@@ -24,8 +23,7 @@ public class SleepItem implements Comparable<SleepItem> {
 
     }
 
-    public SleepItem(int id, String beginStr, String endStr, String amountStr, boolean alone, String where) {
-        this.id = id;
+    public SleepItem(String beginStr, String endStr, String amountStr, boolean alone, String where) {
         this.setAlone(alone);
         this.setWhere(where);
         if (amountStr.isEmpty() || amountStr == null)
@@ -34,14 +32,6 @@ public class SleepItem implements Comparable<SleepItem> {
             this.amount = Duration.parse(amountStr);
         this.setBegin(LocalDateTime.parse(beginStr));
         this.setEnd(LocalDateTime.parse(endStr));
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public LocalDateTime getBegin() {
@@ -91,7 +81,7 @@ public class SleepItem implements Comparable<SleepItem> {
     @Override
     public String toString() {
         // just the date
-        return "(id" + String.valueOf(this.id) + ") " + this.end.toLocalDate().toString();
+        return this.end.toLocalDate().toString();
     }
 
     public boolean isBefore(SleepItem other) {
