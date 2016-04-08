@@ -1,22 +1,19 @@
 package controller;
 
 import javafx.beans.NamedArg;
-import javafx.beans.property.Property;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import model.SleepItem;
 import model.SleepModel;
 import model.SleepProfile;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -41,14 +38,27 @@ public class SleepController implements Observer{
     private ChoiceBox placeChoiceBox;
     @FXML
     private ListView sleepItemsListView;
+    @FXML
+    private CheckBox amountCheckBox;
+    @FXML
+    private Spinner amountHourField;
+    @FXML
+    private Spinner amountMinuteField;
+
 
     private SleepModel model = SleepModel.getInstance();
+    final private SleepItem editingSleepItem = new SleepItem();
+    private ChangeListener<? super LocalDate> beginListener;
 
+    private Stage getStage() {
+        return (Stage) rootBorderPane.getScene().getWindow();
+    }
 
     public SleepController() {
     }
 
     public void initialize() {
+        // Date fields
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
         beginDatePicker.setValue(yesterday);
@@ -57,11 +67,55 @@ public class SleepController implements Observer{
         endDatePicker.setValue(today);
         endHourField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 23, 8));
         endMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59, 30));
+        // Custom amount binding
+        amountHourField.disableProperty().bind(amountCheckBox.selectedProperty().not());
+        amountMinuteField.disableProperty().bind(amountCheckBox.selectedProperty().not());
+
+        // begin datetime listener
+        ChangeListener<? super LocalDate> beginListener = (observable, oldValue, newValue) -> {
+            LocalDateTime d = LocalDateTime.from(beginDatePicker.getValue());
+            d = d.withHour((Integer) beginHourField.getValue());
+            d = d.withMinute((Integer) beginMinuteField.getValue());
+            editingSleepItem.setBegin(d);
+        };
+        beginDatePicker.valueProperty().addListener(beginListener);
+        beginHourField.valueProperty().addListener(beginListener);
+        beginMinuteField.valueProperty().addListener(beginListener);
+
+        // end datetime listener
+        ChangeListener<? super LocalDate> endListener = (observable, oldValue, newValue) -> {
+            LocalDateTime d = LocalDateTime.from(endDatePicker.getValue());
+            d = d.withHour((Integer) endHourField.getValue());
+            d = d.withMinute((Integer) endMinuteField.getValue());
+            editingSleepItem.setEnd(d);
+        };
+        endDatePicker.valueProperty().addListener(endListener);
+        endHourField.valueProperty().addListener(endListener);
+        endMinuteField.valueProperty().addListener(endListener);
+
+        // alone
+        editingSleepItem.aloneProperty().bind(aloneCheckBox.selectedProperty());
+
+
 
         // register to the model
         model.addObserver(this);
+
+        sleepItemsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
+            SleepItem value = (SleepItem) newValue;
+
+            this.editingSleepItem.setId(value.getId());
+            this.editingSleepItem.setBegin(value.getBegin());
+            this.editingSleepItem.setEnd(value.getEnd());
+            this.editingSleepItem.setAmount(value.getAmount());
+            this.editingSleepItem.setAlone(value.getAlone());
+            this.editingSleepItem.setWhere(value.getWhere());
+        });
+
+        aloneCheckBox.selectedProperty().bindBidirectional(this.editingSleepItem.aloneProperty());
     }
 
+    @FXML
     public void loadProfile(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open profile");
@@ -71,11 +125,29 @@ public class SleepController implements Observer{
         model.loadProfile(f);
     }
 
+    @FXML
     public void saveProfile() {
         model.saveProfile();
     }
 
+    @FXML
     public void addSleepItem(){
+        Alert alert = new Alert(Alert.AlertType.NONE);
+
+        if (this.model.addItem(this.editingSleepItem)) {
+            alert.setAlertType(Alert.AlertType.INFORMATION);
+            alert.setContentText("Item added successfully");
+        }
+        else{
+            alert.setAlertType(Alert.AlertType.ERROR);
+            alert.setContentText("Can not add item");
+        }
+
+        alert.showAndWait();
+    }
+
+    @FXML
+    public void close() {
 
     }
 
@@ -84,6 +156,7 @@ public class SleepController implements Observer{
         SleepProfile sp = (SleepProfile) arg;
         System.out.println("profile changed notification : " + sp.getName());
 
+        getStage().setTitle("Sleep - " + sp.getName());
         placeChoiceBox.setItems(sp.getPlaces());
         sleepItemsListView.setItems(sp.getSleepItems());
     }

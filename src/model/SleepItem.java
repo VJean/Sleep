@@ -101,7 +101,9 @@ public class SleepItem implements Comparable<SleepItem> {
 
     public boolean overlaps(SleepItem other) {
         return (this.begin.isAfter(other.begin) && this.begin.isBefore(other.end))
-                || (this.end.isAfter(other.begin) && this.end.isBefore(other.end));
+                || (this.end.isAfter(other.begin) && this.end.isBefore(other.end))
+                || (this.begin.isBefore(other.begin) && this.end.isAfter(other.end))
+                || (this.begin.isAfter(other.begin) && this.end.isBefore(other.end));
     }
 
     /**

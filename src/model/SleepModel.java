@@ -55,4 +55,23 @@ public class SleepModel extends Observable{
     public SleepProfile getProfile() {
         return profile;
     }
+
+    public boolean addItem(SleepItem si) {
+        boolean canAdd = true;
+
+        // TODO rather use iterators and a while-loop and exit when canAdd = false
+        for (SleepItem item : this.getProfile().getSleepItems()) {
+            if (item.overlaps(si))
+                canAdd = false;
+        }
+
+        if (canAdd) {
+            this.getProfile().getSleepItems().add(si);
+
+            setChanged();
+            notifyObservers(this.profile);
+        }
+
+        return canAdd;
+    }
 }
