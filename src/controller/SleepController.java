@@ -78,10 +78,12 @@ public class SleepController implements Observer {
     public void loadProfile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open profile");
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("json files", "json"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         File f = fileChooser.showOpenDialog(rootBorderPane.getScene().getWindow());
 
-        model.loadProfile(f);
+        if (f != null) {
+            model.loadProfile(f);
+        }
     }
 
     @FXML
