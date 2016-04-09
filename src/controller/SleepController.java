@@ -48,7 +48,6 @@ public class SleepController implements Observer {
 
     private SleepModel model = SleepModel.getInstance();
     final private SleepItem editingSleepItem = new SleepItem();
-    private ChangeListener<? super LocalDate> beginListener;
 
     private Stage getStage() {
         return (Stage) rootBorderPane.getScene().getWindow();
@@ -71,70 +70,8 @@ public class SleepController implements Observer {
         amountHourField.disableProperty().bind(amountCheckBox.selectedProperty().not());
         amountMinuteField.disableProperty().bind(amountCheckBox.selectedProperty().not());
 
-        // begin datetime listener
-        ChangeListener<? super LocalDate> beginListener = (observable, oldValue, newValue) -> {
-            LocalDate date = beginDatePicker.getValue();
-            int h = (int) beginHourField.getValue();
-            int m = (int) beginMinuteField.getValue();
-            LocalDateTime d = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), h, m);
-
-            editingSleepItem.setBegin(d);
-        };
-        beginDatePicker.valueProperty().addListener(beginListener);
-        beginHourField.valueProperty().addListener(beginListener);
-        beginMinuteField.valueProperty().addListener(beginListener);
-
-        // end datetime listener
-        ChangeListener<? super LocalDate> endListener = (observable, oldValue, newValue) -> {
-            LocalDate date = endDatePicker.getValue();
-            int h = (int) endHourField.getValue();
-            int m = (int) endMinuteField.getValue();
-            LocalDateTime d = LocalDateTime.of(date.getYear(), date.getMonth(), date.getDayOfMonth(), h, m);
-
-            editingSleepItem.setEnd(d);
-        };
-        endDatePicker.valueProperty().addListener(endListener);
-        endHourField.valueProperty().addListener(endListener);
-        endMinuteField.valueProperty().addListener(endListener);
-
-
-        aloneCheckBox.selectedProperty().bindBidirectional(this.editingSleepItem.aloneProperty());
-
         // register to the model
         model.addObserver(this);
-
-        sleepItemsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            SleepItem value = (SleepItem) newValue;
-
-            beginDatePicker.setValue(value.getBegin().toLocalDate());
-            beginHourField.getEditor().setText(String.valueOf(value.getBegin().getHour()));
-            beginMinuteField.getEditor().setText(String.valueOf(value.getBegin().getMinute()));
-
-            endDatePicker.setValue(value.getEnd().toLocalDate());
-            endHourField.getEditor().setText(String.valueOf(value.getEnd().getHour()));
-            endMinuteField.getEditor().setText(String.valueOf(value.getEnd().getMinute()));
-
-            amountCheckBox.setSelected(value.hasCustomAmount());
-            if (value.hasCustomAmount()) {
-                long hours = value.getAmount().getSeconds() / 3600;
-                long minutes = (value.getAmount().getSeconds() - hours * 3600) / 60;
-                amountHourField.getEditor().setText(String.valueOf(hours));
-                amountMinuteField.getEditor().setText(String.valueOf(minutes));
-            } else {
-                amountHourField.getEditor().clear();
-                amountMinuteField.getEditor().clear();
-            }
-            aloneCheckBox.setSelected(value.getAlone());
-            placeChoiceBox.setValue(value.getWhere());
-
-//            this.editingSleepItem.setBegin(value.getBegin());
-//            this.editingSleepItem.setEnd(value.getEnd());
-//            this.editingSleepItem.setAmount(value.getAmount());
-//            this.editingSleepItem.setAlone(value.getAlone());
-//            this.editingSleepItem.setWhere(value.getWhere());
-        });
-
-
     }
 
     @FXML
