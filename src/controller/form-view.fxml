@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.ComboBox?>
 <fx:root type="javafx.scene.control.DialogPane" xmlns:fx="http://javafx.com/fxml">
     <content>
         <GridPane alignment="center" hgap="20.0" vgap="10.0">
@@ -64,8 +65,10 @@
                 <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                     <children>
                         <Label text="Place: "/>
-                        <ChoiceBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"
+                        <ComboBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"
                                    GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
+                        <!--<ChoiceBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"-->
+                                   <!--GridPane.halignment="LEFT" GridPane.rowIndex="2"/>-->
                     </children>
                 </HBox>
                 <CheckBox fx:id="aloneCheckBox" contentDisplay="RIGHT" mnemonicParsing="false" text="Alone"
@@ -87,7 +90,7 @@
         </GridPane>
     </content>
     <buttonTypes>
-        <ButtonType fx:constant="APPLY"/>
+        <ButtonType fx:constant="OK"/>
         <ButtonType fx:constant="CANCEL"/>
     </buttonTypes>
 </fx:root>

@@ -2,7 +2,6 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
@@ -38,8 +37,6 @@ public class SleepController implements Observer {
         model.addObserver(this);
     }
 
-
-
     @FXML
     public void loadProfile() {
         FileChooser fileChooser = new FileChooser();
@@ -61,8 +58,8 @@ public class SleepController implements Observer {
     public void addSleepItem() {
         Optional<SleepItem> toAdd;
 
-        Dialog<SleepItem> d = new Dialog<>();
-        d.setDialogPane(new FormController());
+        SleepItemDialog d = new SleepItemDialog();
+
         toAdd = d.showAndWait();
 
         Alert alert = new Alert(Alert.AlertType.NONE);

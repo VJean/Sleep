@@ -1,17 +1,19 @@
 package controller;
 
 import javafx.beans.NamedArg;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import model.SleepItem;
 import model.SleepModel;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 /**
@@ -33,7 +35,7 @@ public class FormController extends DialogPane implements Initializable {
     @FXML
     private CheckBox aloneCheckBox;
     @FXML
-    private ChoiceBox placeChoiceBox;
+    private ComboBox<String> placeChoiceBox;
     @FXML
     private CheckBox amountCheckBox;
     @FXML
@@ -41,10 +43,10 @@ public class FormController extends DialogPane implements Initializable {
     @FXML
     private Spinner amountMinuteField;
     @FXML
-    private Button addItemButton;
+    private Button btOk;
 
     private SleepModel model = SleepModel.getInstance();
-    final private SleepItem editingSleepItem = new SleepItem();
+    final private SleepItem sleepItem = new SleepItem();
 
     public FormController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("form-view.fxml"));
@@ -59,30 +61,106 @@ public class FormController extends DialogPane implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initFields();
+        buildFields();
         addFormBindings();
     }
 
-    private void initFields() {
+    private void buildFields() {
         // time fields
-        beginHourField.setValueFactory(new FormController.LoopingIntegerSpinnerValueFactory(0, 23, 23));
-        beginMinuteField.setValueFactory(new FormController.LoopingIntegerSpinnerValueFactory(0, 59, 0));
-        endHourField.setValueFactory(new FormController.LoopingIntegerSpinnerValueFactory(0, 23, 8));
-        endMinuteField.setValueFactory(new FormController.LoopingIntegerSpinnerValueFactory(0, 59, 30));
-        amountHourField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 100));
-        amountMinuteField.setValueFactory(new FormController.LoopingIntegerSpinnerValueFactory(0, 59));
+        beginHourField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 23));
+        beginMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59));
+        endHourField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 23));
+        endMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59));
+        amountHourField.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 99));
+        amountMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59));
+
+        // places choicebox
+        placeChoiceBox.setEditable(true);
+        placeChoiceBox.setItems(model.getProfile().getPlaces());
+
+        btOk = (Button) lookupButton(ButtonType.OK);
+        btOk.addEventFilter(ActionEvent.ACTION, event -> {
+            if (!validateAndStore()) {
+                event.consume();
+            }
+        });
+
+    }
+
+    private void initFields() {
         // date fields
         LocalDate today = LocalDate.now();
         LocalDate yesterday = today.minusDays(1);
         beginDatePicker.setValue(yesterday);
         endDatePicker.setValue(today);
-    }
 
+    }
 
     private void addFormBindings() {
         // Custom amount binding
         amountHourField.disableProperty().bind(amountCheckBox.selectedProperty().not());
         amountMinuteField.disableProperty().bind(amountCheckBox.selectedProperty().not());
+
+
+        // custom amount
+        amountCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue) {
+                amountHourField.getEditor().clear();
+                amountMinuteField.getEditor().clear();
+            }
+        });
+    }
+
+    private boolean validateAndStore() {
+        if (beginDatePicker.getValue() == null
+                || endDatePicker.getValue() == null
+                || beginHourField.getValue() == null
+                || beginMinuteField.getValue() == null
+                || endHourField.getValue() == null
+                || endMinuteField.getValue() == null)
+            return false;
+
+        LocalDateTime beginDT = LocalDateTime.of(beginDatePicker.getValue().getYear(),
+                beginDatePicker.getValue().getMonth(), beginDatePicker.getValue().getDayOfMonth(),
+                Integer.parseInt(beginHourField.getEditor().getText()),
+                Integer.parseInt(beginMinuteField.getEditor().getText()));
+        LocalDateTime endDT = LocalDateTime.of(endDatePicker.getValue().getYear(),
+                endDatePicker.getValue().getMonth(), endDatePicker.getValue().getDayOfMonth(),
+                Integer.parseInt(endHourField.getEditor().getText()),
+                Integer.parseInt(endMinuteField.getEditor().getText()));
+
+        if (amountCheckBox.isSelected() && amountHourField.getValue() == null && amountMinuteField.getValue() == null)
+            return false;
+        Duration amount = null;
+        String hstr = amountHourField.getEditor().getText();
+        String mstr = amountMinuteField.getEditor().getText();
+        if (hstr != null && !hstr.isEmpty() && mstr != null && !mstr.isEmpty())
+            amount = Duration.ofHours(Long.parseLong(hstr)).plusMinutes(Long.parseLong(mstr));
+        else if (hstr != null && !hstr.isEmpty())
+            amount = Duration.ofHours(Long.parseLong(hstr));
+        else if (mstr != null && !mstr.isEmpty())
+            amount = Duration.ofMinutes(Long.parseLong(mstr));
+
+        if (endDT.isAfter(LocalDateTime.now())
+                || beginDT.isAfter(endDT)
+                || beginDT.isEqual(endDT)
+                || placeChoiceBox.getValue() == null || placeChoiceBox.getValue().isEmpty()
+                || amountCheckBox.isSelected() && amount == null || amount.compareTo(Duration.between(beginDT, endDT)) > 0)
+            return false;
+
+        // else if valid :
+        sleepItem.setBegin(beginDT);
+        sleepItem.setEnd(endDT);
+        if (amountCheckBox.isSelected()) {
+            sleepItem.setAmount(amount);
+        }
+        sleepItem.setAlone(aloneCheckBox.isSelected());
+        sleepItem.setWhere(placeChoiceBox.getValue());
+        return true;
+    }
+
+    public SleepItem getSleepItem() {
+        return validateAndStore() ? sleepItem : null;
     }
 
 
