@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -36,7 +37,9 @@ public class SleepController implements Observer, Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //addFormBindings();
+        sleepItemsListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
+            sleepItemsListView.scrollTo(sleepItemsListView.getItems().size()-1);
+        });
 
         // register to the model
         model.addObserver(this);
@@ -97,7 +100,7 @@ public class SleepController implements Observer, Initializable{
 
     @FXML
     public void close() {
-
+        Platform.exit();
     }
 
     @Override
