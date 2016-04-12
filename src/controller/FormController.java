@@ -35,7 +35,7 @@ public class FormController extends DialogPane implements Initializable {
     @FXML
     private CheckBox aloneCheckBox;
     @FXML
-    private ComboBox<String> placeChoiceBox;
+    private ChoiceBox<String> placeChoiceBox;
     @FXML
     private CheckBox amountCheckBox;
     @FXML
@@ -47,6 +47,7 @@ public class FormController extends DialogPane implements Initializable {
 
     private SleepModel model = SleepModel.getInstance();
     final private SleepItem sleepItem = new SleepItem();
+
 
     public FormController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("form-view.fxml"));
@@ -75,7 +76,6 @@ public class FormController extends DialogPane implements Initializable {
         amountMinuteField.setValueFactory(new LoopingIntegerSpinnerValueFactory(0, 59));
 
         // places choicebox
-        placeChoiceBox.setEditable(true);
         placeChoiceBox.setItems(model.getProfile().getPlaces());
 
         btOk = (Button) lookupButton(ButtonType.OK);
@@ -84,7 +84,6 @@ public class FormController extends DialogPane implements Initializable {
                 event.consume();
             }
         });
-
     }
 
     private void initFields() {

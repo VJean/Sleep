@@ -1,6 +1,9 @@
 package model;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -23,12 +26,12 @@ public class SleepItem implements Comparable<SleepItem> {
     public SleepItem(String beginStr, String endStr, String amountStr, boolean alone, String where) {
         this.setAlone(alone);
         this.setWhere(where);
+        this.setBegin(LocalDateTime.parse(beginStr));
+        this.setEnd(LocalDateTime.parse(endStr));
         if (amountStr.isEmpty() || amountStr == null)
             this.amount = null;
         else
             this.amount = Duration.parse(amountStr);
-        this.setBegin(LocalDateTime.parse(beginStr));
-        this.setEnd(LocalDateTime.parse(endStr));
     }
 
     public LocalDateTime getBegin() {
@@ -48,7 +51,10 @@ public class SleepItem implements Comparable<SleepItem> {
     }
 
     public Duration getAmount() {
-        return amount;
+        if (amount != null)
+            return amount;
+
+        return Duration.between(begin, end);
     }
 
     public void setAmount(Duration amount) {
@@ -81,8 +87,27 @@ public class SleepItem implements Comparable<SleepItem> {
 
     @Override
     public String toString() {
-        // just the date
-        return this.end.toLocalDate().toString();
+        // construct string
+        String repr = begin.toString()
+                + " -> "
+                + end.toString()
+                + " (";
+
+        repr += amountAsHM();
+
+        repr += " at " + getWhere() + ", ";
+
+        if (!getAlone())
+            repr += "not ";
+        repr += "alone)";
+
+        return repr;
+    }
+
+    private String amountAsHM() {
+        Long h = getAmount().toHours();
+        Long m = getAmount().minusHours(h).toMinutes();
+        return h.toString() + "h" + String.format("%02d", m) + "m";
     }
 
     public boolean isBefore(SleepItem other) {

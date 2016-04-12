@@ -65,7 +65,7 @@
                 <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="3">
                     <children>
                         <Label text="Place: "/>
-                        <ComboBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"
+                        <ChoiceBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"
                                    GridPane.halignment="LEFT" GridPane.rowIndex="2"/>
                         <!--<ChoiceBox fx:id="placeChoiceBox" prefWidth="150.0" GridPane.columnIndex="1"-->
                                    <!--GridPane.halignment="LEFT" GridPane.rowIndex="2"/>-->
