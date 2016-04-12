@@ -145,7 +145,7 @@ public class FormController extends DialogPane implements Initializable {
                 || beginDT.isAfter(endDT)
                 || beginDT.isEqual(endDT)
                 || placeChoiceBox.getValue() == null || placeChoiceBox.getValue().isEmpty()
-                || amountCheckBox.isSelected() && amount == null || amount.compareTo(Duration.between(beginDT, endDT)) > 0)
+                || amountCheckBox.isSelected() && (amount == null || amount.compareTo(Duration.between(beginDT, endDT)) > 0))
             return false;
 
         // else if valid :
