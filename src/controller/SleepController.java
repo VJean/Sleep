@@ -59,6 +59,8 @@ public class SleepController implements Observer, Initializable{
     public void saveProfile() {
         if (currentFile != null) {
             model.saveProfile(currentFile);
+        } else {
+            this.saveProfileAs();
         }
     }
 
@@ -71,6 +73,7 @@ public class SleepController implements Observer, Initializable{
 
         if (f != null) {
             model.saveProfile(f);
+            currentFile = f;
         }
     }
 
