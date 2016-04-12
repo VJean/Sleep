@@ -87,21 +87,21 @@ public class SleepItem implements Comparable<SleepItem> {
 
     @Override
     public String toString() {
-        // construct string
-        String repr = begin.toString()
-                + " -> "
-                + end.toString()
-                + " (";
+        return "from " + begin.toString() + " to " + end.toString();
+    }
 
-        repr += amountAsHM();
+    public String detailsToString() {
+        String details = "(";
 
-        repr += " at " + getWhere() + ", ";
+        details += amountAsHM();
+
+        details += " at " + getWhere() + ", ";
 
         if (!getAlone())
-            repr += "not ";
-        repr += "alone)";
+            details += "not ";
+        details += "alone";
 
-        return repr;
+        return details;
     }
 
     private String amountAsHM() {

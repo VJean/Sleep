@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -23,7 +24,7 @@ public class SleepController implements Observer, Initializable{
     @FXML
     private BorderPane rootBorderPane;
     @FXML
-    private ListView sleepItemsListView;
+    private ListView<SleepItem> sleepItemsListView;
 
     private SleepModel model = SleepModel.getInstance();
     private File currentFile;
@@ -39,7 +40,9 @@ public class SleepController implements Observer, Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         sleepItemsListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
             sleepItemsListView.scrollTo(sleepItemsListView.getItems().size()-1);
+            // TODO set tooltips ?
         });
+
 
         // register to the model
         model.addObserver(this);
