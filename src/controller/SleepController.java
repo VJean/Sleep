@@ -72,11 +72,8 @@ public class SleepController implements Observer {
 
     @FXML
     public void addSleepItem() {
-        Optional<SleepItem> toAdd;
-
         SleepItemDialog d = new SleepItemDialog();
-
-        toAdd = d.showAndWait();
+        Optional<SleepItem> toAdd = d.showAndWait();
 
         Alert alert = new Alert(Alert.AlertType.NONE);
 
