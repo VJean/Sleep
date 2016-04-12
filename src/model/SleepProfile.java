@@ -21,8 +21,8 @@ import java.util.Set;
 @JsonSerialize(using = SleepProfileSerializer.class)
 @JsonDeserialize(using = SleepProfileDeserializer.class)
 public class SleepProfile {
-    private StringProperty name = new SimpleStringProperty();
-    private ObservableList<String> places = new SimpleListProperty<>();
+    private StringProperty name = new SimpleStringProperty("untitled");
+    private ObservableList<String> places = new SimpleListProperty<>(FXCollections.observableArrayList("other"));
     private ObservableList<SleepItem> sleepItems = new SimpleListProperty<>();
 
     public SleepProfile() {
