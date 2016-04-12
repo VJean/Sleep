@@ -1,6 +1,7 @@
 package controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
@@ -11,11 +12,13 @@ import model.SleepModel;
 import model.SleepProfile;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
-public class SleepController implements Observer {
+public class SleepController implements Observer, Initializable{
     @FXML
     private BorderPane rootBorderPane;
     @FXML
@@ -31,7 +34,8 @@ public class SleepController implements Observer {
     public SleepController() {
     }
 
-    public void initialize() {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
         //addFormBindings();
 
         // register to the model
