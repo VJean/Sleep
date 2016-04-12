@@ -4,10 +4,12 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
@@ -121,9 +123,8 @@ public class SleepController implements Observer, Initializable{
         getStage().setTitle("Sleep - " + sp.getName());
         sleepItemsListView.setItems(sp.getSleepItems());
 
-        Map<String, Double> placesCountMap = new HashMap<>();
-
         // places
+        Map<String, Double> placesCountMap = new HashMap<>();
         sp.getPlaces().forEach(p -> placesCountMap.put(p, 0d));
         for(SleepItem i: sp.getSleepItems()){
             placesCountMap.put(i.getWhere(), placesCountMap.get(i.getWhere()) + 1);
@@ -133,7 +134,12 @@ public class SleepController implements Observer, Initializable{
         ObservableList<PieChart.Data> d = FXCollections.observableList(dl);
         placesChart.setData(d);
 
-
+        // amount
+        XYChart.Series series = new XYChart.Series();
+        for (SleepItem i: sp.getSleepItems().sorted()) {
+            series.getData().add(new XYChart.Data<String, Number>(i.getEnd().toLocalDate().toString(), i.getAmount().getSeconds()));
+        }
+        amountLineChart.getData().add(series);
 
     }
 }
