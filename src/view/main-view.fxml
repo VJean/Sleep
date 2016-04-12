@@ -23,8 +23,9 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#loadProfile" text="Open profile..." />
-                  <MenuItem mnemonicParsing="false" onAction="#saveProfile" text="Save profile..." />
+              <MenuItem mnemonicParsing="false" onAction="#loadProfile" text="Open" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveProfile" text="Save" />
+                  <MenuItem mnemonicParsing="false" onAction="#saveProfileAs" text="Save as" />
                   <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#close" text="Close" />
             </items>
           </Menu>

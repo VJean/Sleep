@@ -22,6 +22,7 @@ public class SleepController implements Observer {
     private ListView sleepItemsListView;
 
     private SleepModel model = SleepModel.getInstance();
+    private File currentFile;
 
     private Stage getStage() {
         return (Stage) rootBorderPane.getScene().getWindow();
@@ -46,11 +47,19 @@ public class SleepController implements Observer {
 
         if (f != null) {
             model.loadProfile(f);
+            currentFile = f;
         }
     }
 
     @FXML
     public void saveProfile() {
+        if (currentFile != null) {
+            model.saveProfile(currentFile);
+        }
+    }
+
+    @FXML
+    public void saveProfileAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save profile");
         fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
