@@ -1,9 +1,13 @@
 package controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
@@ -15,16 +19,17 @@ import model.SleepProfile;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SleepController implements Observer, Initializable{
     @FXML
     private BorderPane rootBorderPane;
     @FXML
     private ListView<SleepItem> sleepItemsListView;
+    @FXML
+    private PieChart placesChart;
+    @FXML
+    private LineChart<String, Number> amountLineChart;
 
     private SleepModel model = SleepModel.getInstance();
     private File currentFile;
@@ -42,6 +47,8 @@ public class SleepController implements Observer, Initializable{
             sleepItemsListView.scrollTo(sleepItemsListView.getItems().size()-1);
             // TODO set tooltips ?
         });
+
+
 
 
         // register to the model
@@ -113,5 +120,20 @@ public class SleepController implements Observer, Initializable{
 
         getStage().setTitle("Sleep - " + sp.getName());
         sleepItemsListView.setItems(sp.getSleepItems());
+
+        Map<String, Double> placesCountMap = new HashMap<>();
+
+        // places
+        sp.getPlaces().forEach(p -> placesCountMap.put(p, 0d));
+        for(SleepItem i: sp.getSleepItems()){
+            placesCountMap.put(i.getWhere(), placesCountMap.get(i.getWhere()) + 1);
+        }
+        List<PieChart.Data> dl = new ArrayList<>();
+        placesCountMap.entrySet().forEach(e -> dl.add(new PieChart.Data(e.getKey(), e.getValue())));
+        ObservableList<PieChart.Data> d = FXCollections.observableList(dl);
+        placesChart.setData(d);
+
+
+
     }
 }
