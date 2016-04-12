@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,10 +44,13 @@ public class SleepModel extends Observable{
         notifyObservers(this.profile);
     }
 
-    public void saveProfile(){
+    public void saveProfile(File f){
         ObjectMapper mapper = new ObjectMapper();
+        // pretty print
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
         try {
-            mapper.writeValue(System.out, this.profile);
+            mapper.writeValue(f, this.profile);
         } catch (IOException e) {
             e.printStackTrace();
         }
