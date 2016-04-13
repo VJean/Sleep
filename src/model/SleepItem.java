@@ -90,10 +90,11 @@ public class SleepItem implements Comparable<SleepItem> {
 
     @Override
     public String toString() {
+        DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm", Locale.getDefault());
         return "from "
-                + begin.format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm", Locale.getDefault()))
+                + begin.format(f)
                 + " to "
-                + end.format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm", Locale.getDefault()));
+                + end.format(f);
     }
 
     public String detailsToString() {
