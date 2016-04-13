@@ -13,7 +13,9 @@ public class SleepApp extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("main-view.fxml"));
         primaryStage.setTitle("Sleep");
         primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
+        primaryStage.setMinHeight(400);
+        primaryStage.setMinWidth(900);
+        primaryStage.setResizable(true);
 
         primaryStage.show();
     }

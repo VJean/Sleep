@@ -2,17 +2,17 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.SleepItem;
@@ -25,19 +25,20 @@ import java.util.*;
 
 public class SleepController implements Observer, Initializable{
     @FXML
-    private BorderPane rootBorderPane;
+    private VBox rootContainer;
     @FXML
     private ListView<SleepItem> sleepItemsListView;
     @FXML
+    private Pane chartContainer;
+
     private PieChart placesChart;
-    @FXML
     private LineChart<String, Number> amountLineChart;
 
     private SleepModel model = SleepModel.getInstance();
     private File currentFile;
 
     private Stage getStage() {
-        return (Stage) rootBorderPane.getScene().getWindow();
+        return (Stage) rootContainer.getScene().getWindow();
     }
 
     public SleepController() {

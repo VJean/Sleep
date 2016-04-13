@@ -5,8 +5,11 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.text.DateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Created by JeanV on 20/03/2016.
@@ -87,7 +90,10 @@ public class SleepItem implements Comparable<SleepItem> {
 
     @Override
     public String toString() {
-        return "from " + begin.toString() + " to " + end.toString();
+        return "from "
+                + begin.format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm", Locale.getDefault()))
+                + " to "
+                + end.format(DateTimeFormatter.ofPattern("dd/MM/yy hh:mm", Locale.getDefault()));
     }
 
     public String detailsToString() {
