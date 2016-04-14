@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -49,6 +50,14 @@
             <Pane fx:id="chartContainer" />
          </children>
       </HBox>
-        <HBox maxHeight="25.0" minHeight="25.0" />
+      <Pane>
+         <children>
+              <HBox alignment="CENTER_LEFT" maxHeight="25.0" minHeight="25.0">
+               <children>
+                  <Label fx:id="logLabel" prefWidth="292.0" text="Label" textFill="#ababab" />
+               </children>
+            </HBox>
+         </children>
+      </Pane>
     </children>
 </VBox>

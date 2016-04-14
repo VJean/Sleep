@@ -11,6 +11,7 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -29,6 +30,8 @@ public class SleepController implements Observer, Initializable{
     private VBox rootContainer;
     @FXML
     private ListView<SleepItem> sleepItemsListView;
+    @FXML
+    private Label logLabel;
     @FXML
     private Pane chartContainer;
 
