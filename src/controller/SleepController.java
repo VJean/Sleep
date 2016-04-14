@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
@@ -31,8 +32,8 @@ public class SleepController implements Observer, Initializable{
     @FXML
     private Pane chartContainer;
 
-    private PieChart placesChart;
-    private LineChart<String, Number> amountLineChart;
+    private PieChart placesChart = new PieChart();
+    //private LineChart<String, Number> amountLineChart;
 
     private SleepModel model = SleepModel.getInstance();
     private File currentFile;
@@ -51,7 +52,9 @@ public class SleepController implements Observer, Initializable{
             // TODO set tooltips ?
         });
 
+        placesChart.setLegendVisible(false);
 
+        chartContainer.getChildren().add(placesChart);
 
 
         // register to the model
@@ -136,11 +139,11 @@ public class SleepController implements Observer, Initializable{
         placesChart.setData(d);
 
         // amount
-        XYChart.Series series = new XYChart.Series();
-        for (SleepItem i: sp.getSleepItems().sorted()) {
-            series.getData().add(new XYChart.Data<String, Number>(i.getEnd().toLocalDate().toString(), i.getAmount().getSeconds()));
-        }
-        amountLineChart.getData().add(series);
+//        XYChart.Series series = new XYChart.Series();
+//        for (SleepItem i: sp.getSleepItems().sorted()) {
+//            series.getData().add(new XYChart.Data<String, Number>(i.getEnd().toLocalDate().toString(), i.getAmount().getSeconds()));
+//        }
+//        amountLineChart.getData().add(series);
 
     }
 }
