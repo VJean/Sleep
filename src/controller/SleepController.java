@@ -1,12 +1,19 @@
 package controller;
 
 import javafx.application.Platform;
-import javafx.collections.ListChangeListener;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Side;
+import javafx.scene.Node;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.SleepItem;
@@ -15,22 +22,24 @@ import model.SleepProfile;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class SleepController implements Observer, Initializable{
     @FXML
-    private BorderPane rootBorderPane;
+    private VBox rootContainer;
     @FXML
     private ListView<SleepItem> sleepItemsListView;
+    @FXML
+    private Pane chartContainer;
+
+    private PieChart placesChart = new PieChart();
+    //private LineChart<String, Number> amountLineChart;
 
     private SleepModel model = SleepModel.getInstance();
     private File currentFile;
 
     private Stage getStage() {
-        return (Stage) rootBorderPane.getScene().getWindow();
+        return (Stage) rootContainer.getScene().getWindow();
     }
 
     public SleepController() {
@@ -42,6 +51,10 @@ public class SleepController implements Observer, Initializable{
             sleepItemsListView.scrollTo(sleepItemsListView.getItems().size()-1);
             // TODO set tooltips ?
         });
+
+        placesChart.setLegendVisible(false);
+
+        chartContainer.getChildren().add(placesChart);
 
 
         // register to the model
@@ -113,5 +126,24 @@ public class SleepController implements Observer, Initializable{
 
         getStage().setTitle("Sleep - " + sp.getName());
         sleepItemsListView.setItems(sp.getSleepItems());
+
+        // places
+        Map<String, Double> placesCountMap = new HashMap<>();
+        sp.getPlaces().forEach(p -> placesCountMap.put(p, 0d));
+        for(SleepItem i: sp.getSleepItems()){
+            placesCountMap.put(i.getWhere(), placesCountMap.get(i.getWhere()) + 1);
+        }
+        List<PieChart.Data> dl = new ArrayList<>();
+        placesCountMap.entrySet().forEach(e -> dl.add(new PieChart.Data(e.getKey(), e.getValue())));
+        ObservableList<PieChart.Data> d = FXCollections.observableList(dl);
+        placesChart.setData(d);
+
+        // amount
+//        XYChart.Series series = new XYChart.Series();
+//        for (SleepItem i: sp.getSleepItems().sorted()) {
+//            series.getData().add(new XYChart.Data<String, Number>(i.getEnd().toLocalDate().toString(), i.getAmount().getSeconds()));
+//        }
+//        amountLineChart.getData().add(series);
+
     }
 }
