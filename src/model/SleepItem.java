@@ -5,14 +5,20 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.text.DateFormat;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by JeanV on 20/03/2016.
  * Note: this class has a natural ordering that is inconsistent with equals.
  */
 public class SleepItem implements Comparable<SleepItem> {
+    static private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yy HH:mm", Locale.getDefault());
     private LocalDateTime begin;
     private LocalDateTime end;
     private Duration amount;
@@ -87,11 +93,26 @@ public class SleepItem implements Comparable<SleepItem> {
 
     @Override
     public String toString() {
-        return "from " + begin.toString() + " to " + end.toString();
+        return "from "
+                + begin.format(dateTimeFormatter)
+                + " to "
+                + end.format(dateTimeFormatter);
+    }
+
+    public Map<String, String> detailsToMap() {
+        Map<String, String> details = new HashMap<>();
+
+        details.put("Begin", begin.format(dateTimeFormatter));
+        details.put("End", end.format(dateTimeFormatter));
+        details.put("Place", getWhere());
+        details.put("Alone", getAlone() ? "yes" : "no");
+        details.put("Duration", amountAsHM());
+
+        return details;
     }
 
     public String detailsToString() {
-        String details = "(";
+        String details = toString() + " (";
 
         details += amountAsHM();
 
