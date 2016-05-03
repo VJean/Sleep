@@ -5,14 +5,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Side;
-import javafx.scene.Node;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -31,9 +26,23 @@ public class SleepController implements Observer, Initializable{
     @FXML
     private ListView<SleepItem> sleepItemsListView;
     @FXML
+    private GridPane detailsTable; // TODO Grid layout instead
+    @FXML
+    private ToggleButton detailsButton;
+    @FXML
+    private Label detailsBeginLabel;
+    @FXML
+    private Label detailsEndLabel;
+    @FXML
+    private Label detailsDurationLabel;
+    @FXML
+    private Label detailsAloneLabel;
+    @FXML
+    private Label detailsPlaceLabel;
+    @FXML
     private Label logLabel;
     @FXML
-    private Pane chartContainer;
+    private Accordion chartContainer;
 
     private PieChart placesChart = new PieChart();
     //private LineChart<String, Number> amountLineChart;
@@ -45,20 +54,31 @@ public class SleepController implements Observer, Initializable{
         return (Stage) rootContainer.getScene().getWindow();
     }
 
+    private void updateDetails(Map<String, String> details) {
+        detailsBeginLabel.setText(details.get("Begin"));
+        detailsEndLabel.setText(details.get("End"));
+        detailsDurationLabel.setText(details.get("Duration"));
+        detailsAloneLabel.setText(details.get("Alone"));
+        detailsPlaceLabel.setText(details.get("Place"));
+    }
+
     public SleepController() {
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //detailsTable.visibleProperty().bind(detailsButton.selectedProperty());
+
         sleepItemsListView.itemsProperty().addListener((observable, oldValue, newValue) -> {
             sleepItemsListView.scrollTo(sleepItemsListView.getItems().size()-1);
             // TODO set tooltips ?
         });
+        sleepItemsListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            updateDetails(newValue.detailsToMap());
+        });
 
         placesChart.setLegendVisible(false);
-
-        chartContainer.getChildren().add(placesChart);
-
+        //chartContainer.getChildren().add(placesChart);
 
         // register to the model
         model.addObserver(this);
