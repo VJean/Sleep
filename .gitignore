@@ -4,3 +4,4 @@ out/
 
 res/*
 !res/sample*
+!res/screen.png
